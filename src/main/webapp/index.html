@@ -82,10 +82,8 @@
                         <ul class="list-group">
                             <h5>{{currentThread.title}}</h5>
                             <li class="list-group-item" ng-repeat="post in currentThread.posts | orderBy:'editDate'">
-                                <div>
-                                    <b>By: {{post.author}}</b>
-                                    <p>{{post.text}}</p>
-                                </div>
+                                <!--<div ng-include="'customDirectives/post.html'"></div>-->
+                                <post></post>
                             </li>
                         </ul>
                         <!--Form for a new post in the thread-->
@@ -93,10 +91,8 @@
                                         ng-controller="PostController as postCtrl"
                                         ng-submit="postForm.$valid && postCtrl.addPost(currentThread)"
                                         novalidate >   <!-- turn off default HTML validation (some browsers have it built in, we need more consistency) -->
-                            <div>
-                                <b>By: {{postCtrl.post.author}}</b>
-                                <p>{{postCtrl.post.text}}</p>
-                            </div>
+                            <!--<div ng-include="'customDirectives/post.html'" ng-init="post = postCtrl.post"></div>-->
+                            <post></post>
 
                             <!--this is an example: <select ng-model="review.stars">-->
                             <!--<option value="1">1 star</option>-->
@@ -113,7 +109,7 @@
                             </fieldset>
 
                             <!--TODO krcl debug code:-->
-                            <div> postForm is {{postForm.$valid}}</div>
+                            <div> postForm.$valid is {{postForm.$valid}}</div>
 
                             <fieldset class="form-group">
                                 <input type="submit" class="btn btn-primary pull-right" value="Submit"/>

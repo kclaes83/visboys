@@ -41,6 +41,7 @@
         this.post = {};
 
         this.addPost = function (currentThread) {
+            this.post.creationDate = Date.now();
             currentThread.posts.push(this.post);
             this.post = {};
         };
@@ -53,6 +54,23 @@
     var myMatches = [
 
     ];
+
+
+
+
+    ///////////////////////
+    // Custom Directives //
+    ///////////////////////
+    app.directive('post', function () {
+        return {
+            // Directive definition object
+            restrict: 'E',  // E = Element html
+            templateUrl: 'customDirectives/post.html'
+        };
+    });
+
+
+
 
 
 
