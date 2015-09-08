@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html ng-app="visboys">
+<head lang="en">
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="css/default.css"/>
+    <title></title>
+</head>
+<body>
+    <script type="text/javascript" src="js/angular.min.js"></script>
+    <script type="text/javascript" src="js/app.js"></script>
+
+    <div ng-controller="LoginController as loginCtrl">
+        <h1> Logged in user </h1>
+        <h2> ${{loginCtrl.user.name}} </h2>
+        <p> {{loginCtrl.user.email}}</p>
+        <button ng-show="loginCtrl.user.isModerator"> Moderator tabCtrl </button>
+
+
+
+
+
+
+        <section ng-controller="TabController as tabCtrl">
+            <ul class="nav nav-pills">
+                <li ng-class="{ active: tabCtrl.isSelected('homeTab')}">
+                    <a href ng-click="tabCtrl.selectTab('homeTab')">Home</a>
+                </li>
+                <li ng-class="{ active: tabCtrl.isSelected('forumTab')}">
+                    <a href ng-click="tabCtrl.selectTab('forumTab')">Forum</a>
+                </li>
+                <li ng-class="{ active: tabCtrl.isSelected('galleryTab')}">
+                    <a href ng-click="tabCtrl.selectTab('galleryTab')">Gallery</a>
+                </li>
+            </ul>
+            {{tab}}
+
+
+
+            <!-- content for tabs: -->
+            <div class="panel" ng-show="tabCtrl.isSelected('homeTab')">
+                <h4>Home</h4>
+                <p>something something</p>
+            </div>
+
+
+
+            <div class="panel" ng-show="tabCtrl.isSelected('forumTab')">
+                <h4>Visboys Forum 2.0</h4>
+                <div ng-controller="ForumController as forumCtrl">
+                    <!--TODO krcl breadcrumb , via currentThread?-->
+                    <!--https://github.com/ncuillery/angular-breadcrumb/wiki/Getting-started-->
+                    currentThread: {{currentThread.title}}
+
+
+                    <ul class="list-group" ng-hide="currentThread">
+                        <li class="list-group-item" ng-repeat="forum in forumCtrl.forums | orderBy:'modificationDate'" ng-include="'forumTree'">
+                        </li>
+                    </ul>
+
+                    <!-- recursive template of forumCtrl overview -->
+                    <script type="text/ng-template" id="forumTree">
+                        <h3>Forum : {{forum.name}}
+                            <em class="pull-right">{{forum.description | limitTo: 50 }}</em>
+                        </h3>
+                        <ul class="list-group">
+                            <li class="list-group-item" ng-repeat="thread in forum.threads">
+                                {{thread}}
+                                <h5><a href ng-click="selectThread(thread)">{{thread.title}}</a></h5>
+                            </li>
+                        </ul>
+
+                        <ul class="list-group" ng-if="forum.subForums">
+                            <li class="list-group-item" ng-repeat="forum in forum.subForums" ng-include="'forumTree'">
+                            </li>
+                        </ul>
+                    </script>
+
+
+                    <!-- View in thread -->
+                    <div ng-show="currentThread">
+                        <ul class="list-group">
+                            <h5>{{currentThread.title}}</h5>
+                            <li class="list-group-item" ng-repeat="post in currentThread.posts | orderBy:'editDate'">
+                                <div>
+                                    <b>By: {{post.author}}</b>
+                                    <p>{{post.text}}</p>
+                                </div>
+                            </li>
+                        </ul>
+                        <!--Form for a new post in the thread-->
+                        <form name="postForm"
+                                        ng-controller="PostController as postCtrl"
+                                        ng-submit="postForm.$valid && postCtrl.addPost(currentThread)"
+                                        novalidate >   <!-- turn off default HTML validation (some browsers have it built in, we need more consistency) -->
+                            <div>
+                                <b>By: {{postCtrl.post.author}}</b>
+                                <p>{{postCtrl.post.text}}</p>
+                            </div>
+
+                            <!--this is an example: <select ng-model="review.stars">-->
+                            <!--<option value="1">1 star</option>-->
+                            <!--<option value="2">2 stars</option>-->
+                            <!--...-->
+                            <!--</select>-->
+                            <h5>Submit a post</h5>
+                            <fieldset class="form-group">
+                                <label>By:</label>
+                                <input ng-model="postCtrl.post.author" class="form-control" type="email" required />
+                            </fieldset>
+                            <fieldset class="form-group">
+                                <textarea ng-model="postCtrl.post.text" class="form-control" placeholder="Write your post ..." required ></textarea>
+                            </fieldset>
+
+                            <!--TODO krcl debug code:-->
+                            <div> postForm is {{postForm.$valid}}</div>
+
+                            <fieldset class="form-group">
+                                <input type="submit" class="btn btn-primary pull-right" value="Submit"/>
+                            </fieldset>
+                        </form>
+                    </div>
+
+
+                </div>
+            </div>
+
+
+
+
+            <div class="panel" ng-show="tabCtrl.isSelected('galleryTab')">
+                <h4>Gallery</h4>
+                <p>gallery content</p>
+            </div>
+
+
+
+        </section>
+
+
+    </div>
+
+
+
+    <!--<p>{{"hello" + " you"}}</p>-->
+</body>
+
+
+
+
+</html>
