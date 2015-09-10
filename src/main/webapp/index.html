@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html ng-app="visboys">
+<!--TODO krcl ng-strict-di-->
 <head lang="en">
     <meta charset="UTF-8">
     <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
@@ -8,7 +9,10 @@
 </head>
 <body>
     <script type="text/javascript" src="js/angular.min.js"></script>
+    <!--<script type="text/javascript" src="[...]angular-breadcrumb[.min].js"></script>-->
+
     <script type="text/javascript" src="js/app.js"></script>
+    <script type="text/javascript" src="js/forum.js"></script>
 
     <div ng-controller="LoginController as loginCtrl">
         <h1> Logged in user </h1>
@@ -17,7 +21,7 @@
         <button ng-show="loginCtrl.user.isModerator"> Moderator tabCtrl </button>
 
 
-
+        <!--<b>{{5 | currency:'€'}}</b>-->
 
 
 
@@ -33,7 +37,6 @@
                     <a href ng-click="tabCtrl.selectTab('galleryTab')">Gallery</a>
                 </li>
             </ul>
-            {{tab}}
 
 
 
@@ -50,10 +53,10 @@
                 <div ng-controller="ForumController as forumCtrl">
                     <!--TODO krcl breadcrumb , via currentThread?-->
                     <!--https://github.com/ncuillery/angular-breadcrumb/wiki/Getting-started-->
-                    currentThread: {{currentThread.title}}
+                    currentThread: {{forumCtrl.currentThread.title}}
+                    testing: {{name}}
 
-
-                    <ul class="list-group" ng-hide="currentThread">
+                    <ul class="list-group" ng-hide="forumCtrl.currentThread">
                         <li class="list-group-item" ng-repeat="forum in forumCtrl.forums | orderBy:'modificationDate'" ng-include="'forumTree'">
                         </li>
                     </ul>
@@ -66,7 +69,7 @@
                         <ul class="list-group">
                             <li class="list-group-item" ng-repeat="thread in forum.threads">
                                 {{thread}}
-                                <h5><a href ng-click="selectThread(thread)">{{thread.title}}</a></h5>
+                                <h5><a href ng-click="forumCtrl.selectThread(thread)">{{thread.title}}</a></h5>
                             </li>
                         </ul>
 
@@ -78,21 +81,22 @@
 
 
                     <!-- View in thread -->
-                    <div ng-show="currentThread">
+                    <div ng-show="forumCtrl.currentThread">
                         <ul class="list-group">
-                            <h5>{{currentThread.title}}</h5>
-                            <li class="list-group-item" ng-repeat="post in currentThread.posts | orderBy:'editDate'">
+                            <h5>{{forumCtrl.currentThread.title}}</h5>
+                            <li class="list-group-item" ng-repeat="post in forumCtrl.currentThread.posts | orderBy:'editDate'">
                                 <!--<div ng-include="'customDirectives/post.html'"></div>-->
-                                <post></post>
+                                <post post="post"></post>
                             </li>
                         </ul>
                         <!--Form for a new post in the thread-->
                         <form name="postForm"
                                         ng-controller="PostController as postCtrl"
-                                        ng-submit="postForm.$valid && postCtrl.addPost(currentThread)"
+                                        ng-submit="postForm.$valid && postCtrl.addPost(forumCtrl.currentThread)"
                                         novalidate >   <!-- turn off default HTML validation (some browsers have it built in, we need more consistency) -->
                             <!--<div ng-include="'customDirectives/post.html'" ng-init="post = postCtrl.post"></div>-->
-                            <post></post>
+                            <h6>Preview of your post</h6>
+                            <post post="postCtrl.post"></post>
 
                             <!--this is an example: <select ng-model="review.stars">-->
                             <!--<option value="1">1 star</option>-->
@@ -137,8 +141,6 @@
     </div>
 
 
-
-    <!--<p>{{"hello" + " you"}}</p>-->
 </body>
 
 

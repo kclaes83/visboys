@@ -1,0 +1,27 @@
+{
+  "name": "visboys",
+  "homepage": "https://github.com/kclaes83/visboys",
+  "description": "KFC Visboys site",
+  "main": "index.html",
+  "authors": [
+    "Kristof Claes (kclaes@gmail.com)"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/kclaes83/visboys.git"
+  },
+  "dependencies": {
+    "angular": "~1.4.5",
+    "angular-breadcrumb": "~0.4.1",
+    "angular-ui-router": "~0.2.15",
+    "bootstrap": "~3.3.5"
+  }
+}
